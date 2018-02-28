@@ -1,0 +1,10 @@
+/Quote.Update/bin
+/Quote/obj
+/Quote.Update/obj
+/QuoteSetup/Debug
+/QuoteSetup/Release
+/QuoteSetup.Installer/obj
+/QuoteSetup.Installer/bin
+/packages
+QuoteSetup.v12.suo
+Quote/bin

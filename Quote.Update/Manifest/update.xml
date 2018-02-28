@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Manifest version="1.0.19">
+  <CheckInterval>3600</CheckInterval>
+  <RemoteConfigUri>https://qaupdater.azurewebsites.net/update.xml</RemoteConfigUri>
+  <SecurityToken>50fd7224-7e2e-4352-9cae-82e0440bab4f</SecurityToken>
+  <BaseUri>https://qaupdater.azurewebsites.net/</BaseUri>
+  <Payload>QuoteSetup.zip</Payload>
+</Manifest>
