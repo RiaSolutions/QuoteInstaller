@@ -1,0 +1,314 @@
+﻿<Window x:Class="StlmQuoteWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:StlmQuoteWPF"
+
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" 
+
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        Title="IQS (Independent Quoting System)" 
+        Icon="Logo.jpg"
+        Height="690" Width="753">
+
+        <Grid>
+        <DockPanel>
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_Quote" IsEnabled="False"/>
+                <MenuItem Header="_Broker" Click="MenuItem_Click_1" />
+                <MenuItem Header="E_xit" Click="MenuItem_Click_2" />
+            </Menu>
+            <TextBox AcceptsReturn="True" Visibility="Hidden"/>
+        </DockPanel>
+
+        <Grid>
+            <Image Source="IndependentLife_Logo.png"
+                   Height="60"
+                   Margin="20,585,0,0"
+                   VerticalAlignment="Top"
+                   Width="300"
+                   HorizontalAlignment="left">
+
+            </Image>
+        </Grid>
+
+        <GroupBox Header="Quote" HorizontalAlignment="Left" Margin="10,25,0,0" VerticalAlignment="Top" Height="199" Width="390">
+            <Grid>
+                <Label Content="Quote Date:" HorizontalAlignment="Left" Margin="20,10,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="txtQuoteDate" HorizontalAlignment="Left" Height="23" Margin="120,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150" IsEnabled="False"/>
+                <Button x:Name="btnSaveQuote" Content="Save" HorizontalAlignment="Left" Margin="290,10,0,0" VerticalAlignment="Top" Width="75" Click="btnSaveQuote_Click" />
+
+                <Label Content="Purchase Date:" HorizontalAlignment="Left" Margin="20,40,0,0" VerticalAlignment="Top"/>
+                <xctk:MaskedTextBox x:Name="txtPurchaseDate" 
+                            Mask="00/00/0000"
+                            CaretIndex="0"
+                            Margin="12,-72,0,0" 
+                            Height="23" Width="150">
+                </xctk:MaskedTextBox>
+
+                <Label Content="Rate Version:" HorizontalAlignment="Left" Margin="20,70,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="txtRateVersion" HorizontalAlignment="Left" Height="23" Margin="120,70,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150" IsEnabled="False"/>
+
+                <Label Content="Broker:" HorizontalAlignment="Left" Margin="20,100,0,0" VerticalAlignment="Top"/>
+                <ComboBox x:Name="cmbBroker" 
+                  ItemsSource="{Binding}" 
+                  SelectedIndex="0"
+                  IsSynchronizedWithCurrentItem="True"
+                  HorizontalAlignment="Left" 
+                  Margin="120,100,0,0" 
+                  VerticalAlignment="Top" 
+                  Width="150"/>
+
+                <Label Content="Budget:" HorizontalAlignment="Left" Margin="20,130,0,0" VerticalAlignment="Top"/>
+                <!--<TextBox x:Name="txtBudgetAmt" HorizontalAlignment="Left" Height="23" Margin="120,130,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="150" />-->
+
+                <telerik:RadMaskedCurrencyInput Grid.Row="2" 
+                                                x:Name="txtBudgetAmt" 
+                                                Margin="120,110,0,0" 
+                                                HorizontalAlignment="Left"
+                                                Height="23"
+                                                Width="150"
+                                                EmptyContent="Budget"  
+                    Value="{Binding Amount, Mode=TwoWay, ValidatesOnExceptions=True, NotifyOnValidationError=True}"/>
+
+
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Header="Annuitant" HorizontalAlignment="Left" Margin="405,25,0,0" VerticalAlignment="Top" Height="199" Width="320">
+            <Grid>
+
+                <Label Content="First Name:" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top" />
+                <TextBox x:Name="txtFirstName" 
+                 Text=""
+                 HorizontalAlignment="Left" Height="23" Margin="90,10,0,0" TextWrapping="Wrap" 
+                 VerticalAlignment="Top" Width="120">
+                </TextBox>
+                <Button x:Name="btnAddAnnuitant" Content="Add" HorizontalAlignment="Left" Margin="220,10,0,0" VerticalAlignment="Top" Width="75" Click="btnAddAnnuitant_Click" />
+
+                <Label Content="Last Name:" HorizontalAlignment="Left" Margin="0,40,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="txtLastName" HorizontalAlignment="Left" Height="23" Margin="90,40,0,0" TextWrapping="Wrap" 
+                 Text="" 
+                 VerticalAlignment="Top" Width="120"/>
+                <Button Content="Edit..." HorizontalAlignment="Left" Margin="220,40,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False"/>
+
+                <Label Content="DOB:" HorizontalAlignment="Left" Margin="0,70,0,0" VerticalAlignment="Top"/>
+                <xctk:MaskedTextBox x:Name="txtDOB" 
+                            Mask="00/00/0000"
+                            CaretIndex="0"
+                            LostFocus="txtDOB_LostFocus"
+                            Margin="-58,-12,0,0" 
+                            Height="23" Width="70">
+                </xctk:MaskedTextBox>
+
+                <Label Content="Rated Age:" HorizontalAlignment="Left" Margin="0,100,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="txtRatedAge" HorizontalAlignment="Left" Height="23" Margin="90,100,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="30"/>
+
+                <Label Content="Gender:" HorizontalAlignment="Left" Margin="0,130,0,0" VerticalAlignment="Top"/>
+                <RadioButton Name="rbMale" GroupName="Gender" Content="Male" IsChecked="True" HorizontalAlignment="Left" Margin="90,135,0,0" VerticalAlignment="Top"/>
+                <RadioButton Name="rbFemale" GroupName="Gender" Content="Female" HorizontalAlignment="Left" Margin="140,135,0,0" VerticalAlignment="Top"/>
+
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Header="Benefit" HorizontalAlignment="Left" Margin="10,220,0,0" VerticalAlignment="Top" Height="199" Width="715">
+            <Grid>
+                
+                <Label Content="Type:" HorizontalAlignment="Left" Margin="20,0,0,0" VerticalAlignment="Top"/>
+                <ComboBox x:Name="cmbType" 
+                  SelectionChanged="cmbType_SelectionChanged"
+                  DropDownClosed="cmbType_DropDownClosed"
+                  SelectedIndex="0"
+                  IsSynchronizedWithCurrentItem="True" 
+                  HorizontalAlignment="Left" Margin="120,0,0,0" VerticalAlignment="Top" Width="150"/>
+                <Button x:Name="btnAddBenefitQuote" Content="Add" HorizontalAlignment="Left" Margin="615,0,0,0" VerticalAlignment="Top" Width="75"  Click="btnAddBenefitQuote_Click" />
+
+                <Label Content="Annuitant:" HorizontalAlignment="Left" Margin="20,30,0,0" VerticalAlignment="Top"/>
+                <ComboBox x:Name="cmbAnnuitant" 
+                    HorizontalAlignment="Left" Margin="120,30,0,0" VerticalAlignment="Top" Width="150"/>
+                <Button x:Name="btnSaveBenefitQuote" Content="Save" HorizontalAlignment="Left" Margin="615,30,0,0" VerticalAlignment="Top" Width="75" Click="btnSaveBenefitQuote_Click" IsEnabled="False"/>
+
+                <Label Content="Mode:" HorizontalAlignment="Left" Margin="20,60,0,0" VerticalAlignment="Top"/>
+                <ComboBox x:Name="cmbMode" 
+                    SelectedIndex="0"
+                    HorizontalAlignment="Left" Margin="120,60,0,0" VerticalAlignment="Top" Width="150">
+                    <ComboBoxItem Content="Monthly"/>
+                    <ComboBoxItem Content="Quarterly"/>
+                    <ComboBoxItem Content="Semi-Annual"/>
+                    <ComboBoxItem Content="Annual"/>
+                </ComboBox>
+                <ComboBox x:Name="cmbModeNA" 
+                    SelectedIndex="0"
+                          IsEnabled="False"
+                    Visibility="Hidden"
+                    HorizontalAlignment="Left" Margin="120,60,0,0" VerticalAlignment="Top" Width="150">
+                    <ComboBoxItem Content=""/>
+                </ComboBox>
+                
+                <Button x:Name="btnCancelEdit" Content="Cancel" HorizontalAlignment="Left" Margin="615,60,0,0" VerticalAlignment="Top" Width="75" Click="btnCancelEdit_Click" IsEnabled="False"/>
+
+                <Label Content="Benefit Amt:" HorizontalAlignment="Left" Margin="20,90,0,0" VerticalAlignment="Top"/>
+                <!--<TextBox x:Name="txtBenefitAmt"
+                         TextChanged="txtBenefitAmt_TextChanged"
+                         LostFocus="txtBenefitAmt_LostFocus"
+                         HorizontalAlignment="Left" Height="23" Margin="120,90,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" />-->
+
+
+                <telerik:RadMaskedCurrencyInput Grid.Row="2" 
+                                                x:Name="txtBenefitAmt" 
+                                                Margin="120,30,0,0" 
+                                                HorizontalAlignment="Left"
+                                                ValueChanged="txtBenefitAmt_ValueChanged"
+                                                LostFocus="txtBenefitAmt_LostFocus"
+                                                Height="23"
+                                                Width="150"
+                                                EmptyContent="Benefit"  
+                    Value="{Binding Amount, Mode=TwoWay, ValidatesOnExceptions=True, NotifyOnValidationError=True}"/>
+
+
+                <Label Content="   Premium Amt:" HorizontalAlignment="Left" Margin="282,90,0,0" VerticalAlignment="Top" />
+        
+                <!--<TextBox x:Name="txtPremiumAmt"
+                         TextChanged="txtPremiumAmt_TextChanged"
+                         LostFocus="txtPremiumAmt_LostFocus"
+                         HorizontalAlignment="Left" Height="23" Margin="380,90,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="125" />-->
+
+                <telerik:RadMaskedCurrencyInput Grid.Row="2" 
+                                                x:Name="txtPremiumAmt" 
+                                                Margin="380,30,0,0" 
+                                                HorizontalAlignment="Left"
+                                                ValueChanged="txtPremiumAmt_ValueChanged"
+                                                LostFocus="txtPremiumAmt_LostFocus"
+                                                Height="23"
+                                                Width="150"
+                                                EmptyContent="Benefit"  
+                    Value="{Binding Amount, Mode=TwoWay, ValidatesOnExceptions=True, NotifyOnValidationError=True}"/>
+                
+                <!--<Label Content="or        Benefit Amt:" HorizontalAlignment="Left" Margin="275,315,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.553,2.038"/>
+        <TextBox x:Name="txtBenefitAmt"
+            HorizontalAlignment="Left" Height="23" Margin="385,315,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" />-->
+
+                <Label Content="First Payment:" HorizontalAlignment="Left" Margin="20,120,0,0" VerticalAlignment="Top" />
+                <xctk:MaskedTextBox x:Name="txtFirstPayment" 
+                            LostFocus="txtFirstPayment_LostFocus"
+                            Mask="00/00/0000"
+                            CaretIndex="0"
+                            Margin="-343,88,0,0" 
+                            Height="23" Width="120">
+                </xctk:MaskedTextBox>
+                <Label Content="Years:" HorizontalAlignment="Left" Margin="250,120,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.553,2.038"/>
+                <TextBox x:Name="txtYears"
+                    LostFocus="txtYears_LostFocus"
+                    HorizontalAlignment="Left" Height="23" Margin="290,120,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="30" />
+                <Label Content="Months:" HorizontalAlignment="Left" Margin="330,120,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.553,2.038"/>
+                <TextBox x:Name="txtMonths"
+                    LostFocus="txtMonths_LostFocus"
+                    HorizontalAlignment="Left" Height="23" Margin="380,120,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="30" />
+                <Label Content="Incr %:" HorizontalAlignment="Left" Margin="420,120,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.553,2.038"/>
+                <TextBox x:Name="txtIncrPct"
+                    HorizontalAlignment="Left" Height="23" Margin="465,120,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="40" />
+
+                <Label Content="Ends:" HorizontalAlignment="Left" Margin="20,150,0,0" VerticalAlignment="Top" />
+                <TextBox x:Name="txtEnds"
+                    HorizontalAlignment="Left" Height="23" Margin="120,150,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                
+
+
+            </Grid>
+        </GroupBox>
+
+
+
+        <Label Content="Survivor Pct" HorizontalAlignment="Left" Margin="255,245,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.553,2.038" Visibility="Hidden"/>
+        <TextBox x:Name="txtSurvivorPct"
+            HorizontalAlignment="Left" Height="23" Margin="265,270,0,0" TextWrapping="Wrap" 
+                 Text="" VerticalAlignment="Top" Width="50" IsEnabled="False" Visibility="Hidden"/>
+
+        <Label Content="Joint Annuitant" HorizontalAlignment="Left" Margin="340,245,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.553,2.038" Visibility="Hidden"/>
+        <ComboBox x:Name="cmbJointAnnuitant"
+            HorizontalAlignment="Left" Margin="325,270,0,0" VerticalAlignment="Top" Width="120" 
+                  IsEnabled="False" Visibility="Hidden"/>
+
+        <Label Content="Survivor Pct" HorizontalAlignment="Left" Margin="450,245,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.553,2.038" Visibility="Hidden"/>
+        <TextBox x:Name="txtJointSurvivorPct"
+            HorizontalAlignment="Left" Height="23" Margin="460,270,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50" IsEnabled="False" Visibility="Hidden"/>
+
+        <!--<Label Content="New Remaining" HorizontalAlignment="Left" Margin="520,290,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.553,2.038"/>
+
+        <Label x:Name="lblBenefitRemaining"
+            Content="$0.00" 
+               HorizontalAlignment="Right" 
+               Margin="540,323,50,0" VerticalAlignment="Top" RenderTransformOrigin="0.553,2.038"/>-->
+
+
+
+        <DataGrid x:Name="dgBenefits" 
+                  AlternatingRowBackground="#FFC4B0B0"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  HorizontalAlignment="Left" Margin="10,424,0,0" VerticalAlignment="Top" Height="156" Width="715">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding AnnuitantName}" Width="100" Header="Annuitant"/>
+                <DataGridTextColumn Binding="{Binding AnnuitantAge}" Width="32" Header="Age"/>
+                <DataGridTextColumn Binding="{Binding BenefitDescr}" Width="85" Header="Type"/>
+                <DataGridTextColumn Binding="{Binding BenefitAmt, StringFormat=C}" Width="75" Header="Benefit Amt">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style>
+                            <Setter Property="TextBlock.TextAlignment" Value="Right"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding PaymentMode}" Width="75" Header="Mode"/>
+                <DataGridTextColumn Binding="{Binding Path=FirstPaymentDate, StringFormat={}{0:MM/dd/yyyy}}" Width="75" Header="1st Pymt"/>
+                <DataGridTextColumn Binding="{Binding CertainYears}" Width="30" Header="Yrs"/>
+                <DataGridTextColumn Binding="{Binding CertainMonths}" Width="30" Header="Mo"/>
+                <DataGridTextColumn Binding="{Binding Path=ImprovementPct, StringFormat={}{0}%}" Width="50" Header="Inc %"/>
+                <DataGridTextColumn Binding="{Binding PremiumAmt, StringFormat=C}" Width="75" Header="Premium">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style>
+                            <Setter Property="TextBlock.TextAlignment" Value="Right"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding TotalExpected1, StringFormat=C}" Visibility="Hidden"  Width="100" Header="TotalExpectedN" />
+                <DataGridTextColumn Binding="{Binding TotalExpected2, StringFormat=C}" Visibility="Hidden"  Width="100" Header="TotalExpectedT" />
+                <DataGridTextColumn Binding="{Binding TotalGuaranteed, StringFormat=C}" Visibility="Hidden"  Width="100" Header="TotalGuaranteed" />
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button x:Name="btnBenefitQuote" Click="btnBenefitQuote_Click" CommandParameter="{Binding Path=ID}"> Edit </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button x:Name="btnDeleteBenefit" Click="btnDeleteBenefit_Click"  CommandParameter="{Binding Path=ID}"> Delete </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Label Content="Total:" HorizontalAlignment="Left" Margin="325,580,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.553,2.038"/>
+
+        <Label x:Name="lblTotalPremiumAmt"
+            Content="$0.00" HorizontalAlignment="Right" Margin="400,580,190,0" VerticalAlignment="Top" RenderTransformOrigin="0.553,2.038"/>
+
+        <Label Content="Minus Fees:" HorizontalAlignment="Left" Margin="325,600,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.553,2.038"/>
+
+        <Label x:Name="lblTotalFees"
+            Content="$750.00" HorizontalAlignment="Right" Margin="400,600,190,0" 
+               VerticalAlignment="Top" RenderTransformOrigin="0.553,2.038"/>
+
+        <Label Content="Remaining:" HorizontalAlignment="Left" Margin="325,620,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.553,2.038"/>
+
+        <Label x:Name="lblTotalRemainingAmt"
+            Content="$0.00" HorizontalAlignment="Right" Margin="400,620,190,0" 
+               VerticalAlignment="Top" RenderTransformOrigin="0.553,2.038"/>
+
+        <Button x:Name="btnReport" Content="Reports" HorizontalAlignment="Left" Margin="630,590,0,0" VerticalAlignment="Top" Width="75" 
+                Click="btnReport_Click" IsEnabled="False"/>
+        <Button Content="Quit" HorizontalAlignment="Left" Margin="630,620,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False"/>
+
+    </Grid>
+</Window>

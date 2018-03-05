@@ -1,0 +1,113 @@
+﻿<Window x:Class="StlmQuoteWPF.BrokerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="IQS (Independent Quoting System)" 
+        Closing="Window_Closing"
+        Icon="Logo.jpg"
+        Height="690" Width="753">
+    <Grid>
+        <DockPanel>
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_Quote" Click="MenuItem_Click" />
+                <MenuItem Header="_Broker" IsEnabled="False" />
+                <MenuItem Header="E_xit" Click="MenuItem_Click_2" />
+            </Menu>
+            <TextBox AcceptsReturn="True" Visibility="Hidden"/>
+        </DockPanel>
+
+        <Grid>
+            <Image Source="IndependentLife_Logo.png"
+                   Height="60"
+                   Margin="20,585,0,0"
+                   VerticalAlignment="Top"
+                   Width="300"
+                   HorizontalAlignment="left">
+
+            </Image>
+        </Grid>
+        <GroupBox Header="Broker" HorizontalAlignment="Left" Margin="10,25,0,0" VerticalAlignment="Top" Height="199" Width="715">
+            <Grid>
+                <Label Content="Brokerage:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="txtBrokerage" HorizontalAlignment="Left" Height="23" Margin="100,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150" IsEnabled="True"/>
+
+                <Label Content="First Name:" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="txtFirstName" HorizontalAlignment="Left" Height="23" Margin="100,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150" IsEnabled="True"/>
+
+                <Label Content="Middle Initial:" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="txtMiddleInitial" HorizontalAlignment="Left" Height="23" Margin="100,70,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="30" IsEnabled="True"/>
+
+                <Label Content="Last Name:" HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="txtLastName" HorizontalAlignment="Left" Height="23" Margin="100,100,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150" IsEnabled="True"/>
+
+                <Label Content="Phone:" HorizontalAlignment="Left" Margin="10,130,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="txtPhone" HorizontalAlignment="Left" Height="23" Margin="100,130,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150" IsEnabled="True"/>
+
+                <Label Content="Address 1:" HorizontalAlignment="Left" Margin="275,10,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="txtAddress1" HorizontalAlignment="Left" Height="23" Margin="365,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150" IsEnabled="True"/>
+
+                <Label Content="Address 2:" HorizontalAlignment="Left" Margin="275,40,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="txtAddress2" HorizontalAlignment="Left" Height="23" Margin="365,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150" IsEnabled="True"/>
+
+                <Label Content="Address 3:" HorizontalAlignment="Left" Margin="275,70,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="txtAddress3" HorizontalAlignment="Left" Height="23" Margin="365,70,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150" IsEnabled="True"/>
+
+                <Label Content="City" HorizontalAlignment="Left" Margin="275,100,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="txtCity" HorizontalAlignment="Left" Height="23" Margin="275,130,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150" IsEnabled="True"/>
+
+                <Label Content="State" HorizontalAlignment="Left" Margin="435,100,0,0" VerticalAlignment="Top"/>
+                <ComboBox x:Name="cmbState" 
+                  ItemsSource="{Binding}" 
+                  SelectedIndex="0"
+                  IsSynchronizedWithCurrentItem="True"
+                  HorizontalAlignment="Left" 
+                  Margin="435,130,0,0" 
+                  VerticalAlignment="Top" 
+                  Width="55"/>
+
+                <Label Content="Zip" HorizontalAlignment="Left" Margin="500,100,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="txtZip" HorizontalAlignment="Left" Height="23" Margin="500,130,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" IsEnabled="True"/>
+
+                <Button x:Name="btnAddBroker" Content="Add" HorizontalAlignment="Left" Margin="600,10,0,0" VerticalAlignment="Top" Width="75"  Click="btnAddBroker_Click" />
+                <Button x:Name="btnSaveBroker" Content="Save" HorizontalAlignment="Left" Margin="600,40,0,0" VerticalAlignment="Top" Width="75" Click="btnSaveBroker_Click"  IsEnabled="False"/>
+                <Button x:Name="btnCancelEdit" Content="Cancel" HorizontalAlignment="Left" Margin="600,70,0,0" VerticalAlignment="Top" Width="75" Click="btnCancelEdit_Click"  IsEnabled="False"/>
+
+            </Grid>
+
+        </GroupBox>
+        
+        <GroupBox Header="Brokers" HorizontalAlignment="Left" Margin="10,220,0,0" VerticalAlignment="Top" Height="350" Width="715">
+            <Grid>
+
+                <DataGrid x:Name="dgBrokers" 
+                  AlternatingRowBackground="#FFC4B0B0"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="310" Width="685">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding EntityName}" Width="120" Header="Brokerage"/>
+                        <DataGridTextColumn Binding="{Binding FirstName}" Width="100" Header="First"/>
+                        <DataGridTextColumn Binding="{Binding LastName}" Width="100" Header="Last"/>
+                        <DataGridTextColumn Binding="{Binding StateCode}" Width="50" Header="State"/>
+                        <DataGridTextColumn Binding="{Binding City}" Width="130" Header="City"/>
+                        <DataGridTemplateColumn Width="75">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button x:Name="btnBrokerEdit" Click="btnBrokerEdit_Click"  Width="75" CommandParameter="{Binding Path=ID}"> Edit </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Width="75">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button x:Name="btnBrokerDelete" Click="btnBrokerDelete_Click" Width="75" CommandParameter="{Binding Path=ID}"> Delete </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+            </Grid>
+        </GroupBox>
+
+    </Grid>
+</Window>
