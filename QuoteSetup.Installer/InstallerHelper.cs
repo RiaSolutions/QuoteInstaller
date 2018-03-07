@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Data;
@@ -11,7 +9,6 @@ using System.Data.Entity;
 using System.Collections;
 using System.Diagnostics;
 using System.Configuration.Install;
-using System.Data.SqlClient;
 
 
 namespace QuoteSetup.Installer
@@ -25,7 +22,7 @@ namespace QuoteSetup.Installer
         private const string _dataDaseInfoName = "DataDaseInfo";
         private const string _dataDaseInfoFileName = "001_Add_Table_DataDaseInfo.sql";
         private const string _sqlConnectionString = @"Data source=(LocalDB)\v11.0;Initial Catalog=Quote;Integrated Security=True;";
-        
+
         #endregion
 
 
@@ -37,6 +34,9 @@ namespace QuoteSetup.Installer
 
             try
             {
+                var folerName = @"D:\QuoteLog";
+                Directory.CreateDirectory(folerName);
+
                 if (!DatabaseExists())
                 {
                     CreateDatabase();
@@ -165,7 +165,7 @@ namespace QuoteSetup.Installer
             {
                 try
                 {
-                    var sql = System.IO.File.ReadAllText(scriptPath);
+                    var sql = File.ReadAllText(scriptPath);
 
                     using (var context = new DbContext(_sqlConnectionString))
                     {
@@ -217,7 +217,6 @@ namespace QuoteSetup.Installer
                 .Where(x => !string.IsNullOrWhiteSpace(x))
                 .Select(x => x.Trim(' ', '\r', '\n'));
         }
-
         #endregion
     }
 }

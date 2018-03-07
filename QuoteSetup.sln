@@ -1,9 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "QuoteSetup", "QuoteSetup\QuoteSetup.vdproj", "{34FAB186-156F-495C-836F-A50A149CF316}"
+	ProjectSection(ProjectDependencies) = postProject
+		{411B2533-6434-4E89-815C-341472EC27EC} = {411B2533-6434-4E89-815C-341472EC27EC}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quote.Update", "Quote.Update\Quote.Update.csproj", "{17C209CB-9E25-4E55-85CC-3AF0CC1FBA48}"
 EndProject

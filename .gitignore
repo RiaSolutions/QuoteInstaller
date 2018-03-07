@@ -8,3 +8,10 @@
 /packages
 QuoteSetup.v12.suo
 Quote/bin
+/BusinessLogicLayer/obj/Debug
+/BusinessLogicLayer/bin/Debug
+/DataAccessLayer/bin/Debug
+/StlmQuoteWPF/bin/Debug
+/StlmQuoteWPF/obj/Debug/TempPE
+/StlmQuoteWPF/obj/Debug
+/DataAccessLayer/obj/Debug
