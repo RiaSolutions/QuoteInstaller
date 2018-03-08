@@ -15,7 +15,8 @@ namespace BusinessLogicLayer
         private string _settlementReportName;
 
         // Development
-        private const string _reportFolder = @"C:\Users\bbopp\Documents\Visual Studio 2013\Projects\StlmtQuote\StlmQuoteWPF\Reports\";
+        //private const string _reportFolder = @"C:\Users\bbopp\Documents\Visual Studio 2013\Projects\StlmtQuote\StlmQuoteWPF\Reports\";
+        private const string _reportFolder = @"C:\Users\bbopp\Source\Repos\QuoteInstaller2\StlmQuoteWPF\Reports\";
         // Production
         //private const string _reportFolder = @"C:\Program Files (x86)\Independent Insurance Group\Independent Quoting System\Reports\";
         
@@ -50,7 +51,7 @@ namespace BusinessLogicLayer
 
         }
 
-        public void CreateQuoteIllustrationReport(int stlmtBrokerID, string annuitantName, string genderAndAge, DateTime quoteDate
+        public void CreateQuoteIllustrationReport(int stlmtBrokerID, string annuitantName, string genderAndAgeLabel, string genderAndAge, DateTime quoteDate
             , DateTime purchaseDate, string rateVersion, DataGrid dgBenefits)
         {
             PdfDocument reportDoc;
@@ -67,6 +68,9 @@ namespace BusinessLogicLayer
             reportDoc = new PdfDocument(_templateIllustrationReport);
 
             // Page 1 *************************************************************************************
+            PdfField BrokerageName = reportDoc.Fields["BrokerageName"];
+            BrokerageName.Value = brk.EntityName;
+
             PdfField BrokerAddress1 = reportDoc.Fields["BrokerAddress1"];
             BrokerAddress1.Value = brk.AddrLine1;
 
@@ -74,31 +78,24 @@ namespace BusinessLogicLayer
             BrokerAddress2.Value = brk.City + ", " + brk.StateCode + ", " + brk.ZipCode5;
 
             PdfField PreparedBy = reportDoc.Fields["PreparedBy"];
-            string tmpName;
-            if (String.IsNullOrEmpty(brk.EntityName) || brk.EntityName.Length < 1)
-                tmpName = brk.FirstName + " " + brk.LastName;
-            else
-                tmpName = brk.EntityName;
-            PreparedBy.Value = tmpName;
+            PreparedBy.Value = brk.FirstName + " " + brk.LastName;
 
             PdfField PreparedFor = reportDoc.Fields["PreparedFor"];
-            //PreparedFor.Value = App.Current.Properties["AnnuitantName"].ToString();
             PreparedFor.Value = annuitantName;
-            
+
+            PdfField GenderAgeLabel = reportDoc.Fields["GenderAgeLabel"];
+            GenderAgeLabel.Value = genderAndAgeLabel;
+
             PdfField GenderAge = reportDoc.Fields["GenderAge"];
-            //GenderAge.Value = App.Current.Properties["GenderAge"].ToString();
             GenderAge.Value = genderAndAge;
 
             PdfField QuoteDate = reportDoc.Fields["QuoteDate"];
-            //QuoteDate.Value = txtQuoteDate.Text;
             QuoteDate.Value = quoteDate.ToShortDateString();
 
             PdfField PurchaseDate = reportDoc.Fields["PurchaseDate"];
-            //PurchaseDate.Value = txtPurchaseDate.Text;
             PurchaseDate.Value = purchaseDate.ToShortDateString();
 
             PdfField RateVersion = reportDoc.Fields["RateVersion"];
-            //RateVersion.Value = txtRateVersion.Text;
             RateVersion.Value = rateVersion;
 
             PdfField BenefitType1 = reportDoc.Fields["BenefitType1"];
@@ -249,12 +246,13 @@ namespace BusinessLogicLayer
 //            , DateTime purchaseDate, string rateVersion, DataGrid dgBenefits)
 
 
-        public void CreateSettlementReport(int stlmtBrokerID, string annuitantName, string genderAndAge, DateTime quoteDate
+        public void CreateSettlementReport(int stlmtBrokerID, string annuitantName, string genderAndAgeLabel, string genderAndAge, DateTime quoteDate
             , DateTime purchaseDate, string rateVersion, DataGrid dgBenefits, int quoteID)
         {
 
             decimal irr = 0.0m;
             decimal equivalentCash = 0.0m;
+            decimal equivalentCashPct = 0.04m;
             DataAccessLayer.Report rpt = new DataAccessLayer.Report();
             rpt.CreateSettlementReportData(quoteID, ref irr, ref equivalentCash);
 
@@ -266,6 +264,9 @@ namespace BusinessLogicLayer
             reportDoc = new PdfDocument(_templateSettlementReport);
 
             // Page 1 *************************************************************************************
+            PdfField BrokerageName = reportDoc.Fields["BrokerageName"];
+            BrokerageName.Value = brk.EntityName;
+
             PdfField BrokerAddress1 = reportDoc.Fields["BrokerAddress1"];
             BrokerAddress1.Value = brk.AddrLine1;
 
@@ -273,15 +274,13 @@ namespace BusinessLogicLayer
             BrokerAddress2.Value = brk.City + ", " + brk.StateCode + ", " + brk.ZipCode5;
 
             PdfField PreparedBy = reportDoc.Fields["PreparedBy"];
-            string tmpName;
-            if (String.IsNullOrEmpty(brk.EntityName) || brk.EntityName.Length < 1)
-                tmpName = brk.FirstName + " " + brk.LastName;
-            else
-                tmpName = brk.EntityName;
-            PreparedBy.Value = tmpName;
+            PreparedBy.Value = brk.FirstName + " " + brk.LastName;
 
             PdfField PreparedFor = reportDoc.Fields["PreparedFor"];
             PreparedFor.Value = annuitantName;
+
+            PdfField GenderAgeLabel = reportDoc.Fields["GenderAgeLabel"];
+            GenderAgeLabel.Value = genderAndAgeLabel;
 
             PdfField GenderAge = reportDoc.Fields["GenderAge"];
             GenderAge.Value = genderAndAge;
@@ -333,37 +332,33 @@ namespace BusinessLogicLayer
                 string paymentMode = dr[5].ToString();
                 int certainYears = Convert.ToInt16(dr[7].ToString());
 
+                endDate = Convert.ToDateTime(dr[6].ToString());
+                //endDate = endDate.AddYears(Convert.ToInt16(dr[7].ToString()));
+                //endDate = endDate.AddMonths(Convert.ToInt16(dr[8].ToString()));
+                endDate = endDate.AddMonths((Convert.ToInt16(dr[7].ToString()) * 12) + (Convert.ToInt16(dr[8].ToString())) - 1);
+
                 switch (dr[3].ToString())
                 {
                     case "Life":
-                        endDate = Convert.ToDateTime(dr[6].ToString());
-                        endDate = endDate.AddYears(Convert.ToInt16(dr[7].ToString()));
-                        endDate = endDate.AddMonths(Convert.ToInt16(dr[8].ToString()));
                         tmpBenefitDesc = "Life with Certain Period Annuity - " + String.Format("{0:C}", benefitAmt) + " for life, payable " + paymentMode + ", "
                             + " guaranteed for " + certainYears.ToString() + " year(s), "
-                            + "beginning on " + Convert.ToDateTime(dr[6].ToString()).ToString("MM/dd/yyyy") + ", "
+                            + "beginning on " + Convert.ToDateTime(dr[6].ToString()).ToShortDateString() + ", "
                             + "with the last guaranteed payment on " + endDate.ToShortDateString();
                         break;
                     case "Period Certain":
-                        endDate = Convert.ToDateTime(dr[6].ToString());
-                        endDate = endDate.AddYears(Convert.ToInt16(dr[7].ToString()));
-                        endDate = endDate.AddMonths(Convert.ToInt16(dr[8].ToString()));
                         tmpBenefitDesc = "Period Certain Annuity - " + String.Format("{0:C}", benefitAmt) + " payable " + paymentMode + ", "
                             + " guaranteed for " + certainYears.ToString() + " year(s), "
-                            + "beginning on " + Convert.ToDateTime(dr[6].ToString()).ToString("MM/dd/yyyy") + ", "
+                            + "beginning on " + Convert.ToDateTime(dr[6].ToString()).ToShortDateString() + ", "
                             + "with the last guaranteed payment on " + endDate.ToShortDateString();
                         break;
                     case "Temporary Life":
-                        endDate = Convert.ToDateTime(dr[6].ToString());
-                        endDate = endDate.AddYears(Convert.ToInt16(dr[7].ToString()));
-                        endDate = endDate.AddMonths(Convert.ToInt16(dr[8].ToString()));
                         tmpBenefitDesc = "Temporary Life Annuity - " + String.Format("{0:C}", benefitAmt) + " paid if living, payable " + paymentMode + ", "
-                            + "beginning on " + Convert.ToDateTime(dr[6].ToString()).ToString("MM/dd/yyyy") 
+                            + "beginning on " + Convert.ToDateTime(dr[6].ToString()).ToShortDateString() 
                             + " for a maximum of " + certainYears.ToString() + " year(s).";
                         break;
                     case "Lump Sum":
-                        tmpBenefitDesc = "Guaranteed Lump Sum - " + String.Format("{0:C}", benefitAmt) 
-                            + " paid on " + Convert.ToDateTime(dr[6].ToString()).ToString("MM/dd/yyyy");
+                        tmpBenefitDesc = "Guaranteed Lump Sum - " + String.Format("{0:C}", benefitAmt)
+                            + " paid on " + Convert.ToDateTime(dr[6].ToString()).ToShortDateString();
                         break;
                     default:
                         break;
@@ -441,6 +436,9 @@ namespace BusinessLogicLayer
 
             PdfField EquivalentCashAmt = reportDoc.Fields["EquivalentCashAmt"];
             EquivalentCashAmt.Value = String.Format("{0:C}", equivalentCash);
+
+            PdfField EquivalentCashPct = reportDoc.Fields["EquivalentCashPct"];
+            EquivalentCashPct.Value = "@ " + equivalentCashPct.ToString("P");
 
             PdfField IRR = reportDoc.Fields["IRR"];
             IRR.Value = irr.ToString("P");

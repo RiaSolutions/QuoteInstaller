@@ -42,35 +42,35 @@ namespace StlmQuoteWPF
             txtFirstPayment.Text = DateTime.Now.AddMonths(2).ToString("MMddyyyy");
             txtYears.Text = "20";
 
-            ////============================================================================================================
+            //============================================================================================================
+            txtFirstName.Text = "John";
+            txtLastName.Text = "Doe";
+            txtDOB.Text = "08/11/1981";
+            txtRatedAge.Text = "36";
+            rbFemale.IsChecked = false;
+            rbMale.IsChecked = true;
+
+
+            App.Current.Properties["QuoteID"] = 1;
+            //////////////////////txtBudgetAmt.Text = "500000";
+            txtBudgetAmt.Value = 100000;
+
+            //// Case #2
             //txtFirstName.Text = "John";
-            //txtLastName.Text = "Doe";
-            //txtDOB.Text = "08/11/1981";
-            //txtRatedAge.Text = "36";
+            //txtLastName.Text = "Cust #2";
+            //txtDOB.Text = "01/09/1969";
+            //txtRatedAge.Text = "49";
             //rbFemale.IsChecked = false;
             //rbMale.IsChecked = true;
 
+            //txtBenefitAmt.Text = "42589.29";
+            //txtFirstPayment.Text = "01152043";
+            //txtYears.Text = "";
 
             //App.Current.Properties["QuoteID"] = 1;
-            ////////////////////////txtBudgetAmt.Text = "500000";
-            //txtBudgetAmt.Value = 100000;
+            //txtBudgetAmt.Text = "500000";
 
-            ////// Case #2
-            ////txtFirstName.Text = "John";
-            ////txtLastName.Text = "Cust #2";
-            ////txtDOB.Text = "01/09/1969";
-            ////txtRatedAge.Text = "49";
-            ////rbFemale.IsChecked = false;
-            ////rbMale.IsChecked = true;
-
-            ////txtBenefitAmt.Text = "42589.29";
-            ////txtFirstPayment.Text = "01152043";
-            ////txtYears.Text = "";
-
-            ////App.Current.Properties["QuoteID"] = 1;
-            ////txtBudgetAmt.Text = "500000";
-
-            ////============================================================================================================
+            //============================================================================================================
 
             App.Current.Properties["StlmtBrokerID"] = 1;
             App.Current.Properties["ProductCnt"] = 0;
@@ -401,7 +401,24 @@ namespace StlmQuoteWPF
                     , tmpGender);
 
                 App.Current.Properties["AnnuitantName"] = txtFirstName.Text + " " + txtLastName.Text;
-                App.Current.Properties["GenderAge"] = (tmpGender == 'M' ? "Male" : "Female") + ", " + txtRatedAge.Text;
+
+                var today = DateTime.Today;
+                var age = today.Year - Convert.ToDateTime(txtDOB.Text).Year;
+                if (Convert.ToDateTime(txtDOB.Text) > today.AddYears(-age)) age--;
+                if(age.ToString() != txtRatedAge.Text)
+                {
+                    App.Current.Properties["GenderAge"] = tmpGender + ", " + txtDOB.Text + ", "
+                        + age.ToString() + ", " + txtRatedAge.Text;
+                    //App.Current.Properties["GenderAge"] = (tmpGender == 'M' ? "Male" : "Female") + ", " + txtDOB.Text + ", "
+                    //    + age.ToString() + ", " + txtRatedAge.Text;
+                    App.Current.Properties["GenderAgeLabel"] = "Gender, DOB, Age, Rated Age:";
+                }
+                else
+                {
+                    App.Current.Properties["GenderAge"] = tmpGender + ", " + txtDOB.Text + ", "
+                        + age.ToString();
+                    App.Current.Properties["GenderAgeLabel"] = "Gender, DOB, Age:";
+                }
 
                 SqlDataAdapter da = new SqlDataAdapter();
                 BusinessLogicLayer.Annuitant ant = new Annuitant();
@@ -544,6 +561,7 @@ namespace StlmQuoteWPF
             QuoteIllustration qi = new QuoteIllustration();
             //qi.CreateQuoteIllustrationReport(Convert.ToInt16(App.Current.Properties["StlmtBrokerID"].ToString())
             //    , App.Current.Properties["AnnuitantName"].ToString()
+            //    , App.Current.Properties["GenderAgeLabel"].ToString()
             //    , App.Current.Properties["GenderAge"].ToString()
             //    , Convert.ToDateTime(txtQuoteDate.Text)
             //    , Convert.ToDateTime(txtPurchaseDate.Text)
@@ -552,6 +570,7 @@ namespace StlmQuoteWPF
 
             qi.CreateSettlementReport(Convert.ToInt16(App.Current.Properties["StlmtBrokerID"].ToString())
                 , App.Current.Properties["AnnuitantName"].ToString()
+                , App.Current.Properties["GenderAgeLabel"].ToString()
                 , App.Current.Properties["GenderAge"].ToString()
                 , Convert.ToDateTime(txtQuoteDate.Text)
                 , Convert.ToDateTime(txtPurchaseDate.Text)

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Data;
@@ -9,6 +11,7 @@ using System.Data.Entity;
 using System.Collections;
 using System.Diagnostics;
 using System.Configuration.Install;
+using System.Data.SqlClient;
 
 
 namespace QuoteSetup.Installer
@@ -21,7 +24,9 @@ namespace QuoteSetup.Installer
         private const int _numberOfAttempts = 3;
         private const string _dataDaseInfoName = "DataDaseInfo";
         private const string _dataDaseInfoFileName = "001_Add_Table_DataDaseInfo.sql";
-        private const string _sqlConnectionString = @"Data source=(LocalDB)\v11.0;Initial Catalog=Quote;Integrated Security=True;";
+
+        private const string _sqlConnectionString = @"Data source=(LocalDB)\v11.0;Initial Catalog=IQSMaster;Integrated Security=True;";
+        //private const string _sqlConnectionString = @"Data Source=.;Initial Catalog=Quote;Integrated Security=True;";
 
         #endregion
 
@@ -31,12 +36,8 @@ namespace QuoteSetup.Installer
         public override void Install(IDictionary savedState)
         {
             base.Install(savedState);
-
             try
             {
-                var folerName = @"D:\QuoteLog";
-                Directory.CreateDirectory(folerName);
-
                 if (!DatabaseExists())
                 {
                     CreateDatabase();
@@ -165,7 +166,7 @@ namespace QuoteSetup.Installer
             {
                 try
                 {
-                    var sql = File.ReadAllText(scriptPath);
+                    var sql = System.IO.File.ReadAllText(scriptPath);
 
                     using (var context = new DbContext(_sqlConnectionString))
                     {
@@ -217,6 +218,7 @@ namespace QuoteSetup.Installer
                 .Where(x => !string.IsNullOrWhiteSpace(x))
                 .Select(x => x.Trim(' ', '\r', '\n'));
         }
+
         #endregion
     }
 }

@@ -125,8 +125,10 @@ namespace BusinessLogicLayer
             decimal finalBenefitAmt = 0.0m;
             double finalPaymentValueAmt = 0.0f;
 
-            if (benefitAmt > 0.0m)
-                premiumAmt = 0.0m;
+            //if (benefitAmt > 0.0m)
+            //    premiumAmt = 0.0m;
+            if (premiumAmt > 0.0m)
+                benefitAmt = 0.0m;
 
             bq.SaveBenefitQuote(benefitQuoteID, quoteID, benefitID, primaryAnnuitantID, jointAnnuitantID, paymentMode, benefitAmt,
                 premiumAmt, firstPaymentDate, certainYears, certainMonths, improvementPct, endDate, persist, ref finalPremiumAmt, ref finalBenefitAmt,
